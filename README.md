@@ -138,6 +138,26 @@ Several projects resolve partial identity data from addresses. None offer a plug
 
 **Where identity-resolver fits:** Given a wallet address, no existing package answers "what DIDs, KYC credentials, vLEI attestations, SBTs, and domains are attached to this address?" across multiple chains. identity-resolver is the only pluggable engine where you pick your providers, set their priority, and get a unified `ResolvedIdentity[]` back — with per-provider timeouts, cancellation, and zero hardcoded endpoints.
 
+## How It Works
+
+```mermaid
+flowchart TB
+    A["resolveIdentities({ address, chain, providers })"] --> B{For each provider}
+    B --> C["SNS Provider"]
+    B --> D["Attestto Creds Provider"]
+    B --> E["Civic Provider"]
+    B --> F["pkh() fallback"]
+    C -->|"did:sns:alice.sol"| G["ResolvedIdentity[]"]
+    D -->|"KYC VC + SBT"| G
+    E -->|"Civic Pass token"| G
+    F -->|"did:pkh:solana:..."| G
+    G --> H["Unified results — ordered by provider priority"]
+
+    style A fill:#1a1a2e,stroke:#7c3aed,color:#e0e0e0
+    style G fill:#1a1a2e,stroke:#10b981,color:#e0e0e0
+    style H fill:#1a1a2e,stroke:#10b981,color:#e0e0e0
+```
+
 ## Install
 
 ```bash
@@ -201,28 +221,14 @@ The [DID Landscape Explorer](https://github.com/chongkan/did-landscape-explorer)
 
 **Recommended architecture:**
 
-<table>
-<tr>
-<td width="40" align="center">1</td>
-<td><strong>Browser</strong> — no keys, no direct RPC</td>
-</tr>
-<tr>
-<td align="center">↓</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td><strong>Your backend proxy</strong> — holds API keys, validates origin</td>
-</tr>
-<tr>
-<td align="center">↓</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td>Solana RPC / Bonfida / UniResolver / Civic</td>
-</tr>
-</table>
+```mermaid
+flowchart LR
+    A[Browser<br>no keys, no direct RPC] --> B[Your backend proxy<br>holds API keys, validates origin]
+    B --> C[Solana RPC]
+    B --> D[Bonfida]
+    B --> E[UniResolver]
+    B --> F[Civic]
+```
 
 ## API
 
