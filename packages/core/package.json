@@ -1,7 +1,7 @@
 {
-  "name": "wallet-identity-resolver",
+  "name": "identity-resolver",
   "version": "0.1.0",
-  "description": "Pluggable on-chain identity discovery — resolve DIDs, SBTs, and credentials from any wallet address",
+  "description": "Identity middleware — resolve DIDs, domains, SBTs, credentials, and compliance status from any wallet address",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -41,7 +41,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chongkan/wallet-identity-resolver.git"
+    "url": "https://github.com/chongkan/identity-resolver.git"
   },
   "author": "Eduardo Chongkan",
   "devDependencies": {

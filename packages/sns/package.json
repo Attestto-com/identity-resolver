@@ -1,7 +1,7 @@
 {
   "name": "@attestto/wir-sns",
   "version": "0.1.0",
-  "description": "SNS (Solana Name Service) provider for wallet-identity-resolver",
+  "description": "SNS (Solana Name Service) provider for identity-resolver",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -25,15 +25,15 @@
     "did",
     "sns",
     "solana",
-    "wallet-identity-resolver"
+    "identity-resolver"
   ],
   "license": "MIT",
   "author": "Eduardo Chongkan",
   "peerDependencies": {
-    "wallet-identity-resolver": "workspace:*"
+    "identity-resolver": "workspace:*"
   },
   "devDependencies": {
-    "wallet-identity-resolver": "workspace:*",
+    "identity-resolver": "workspace:*",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
   }

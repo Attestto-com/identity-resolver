@@ -1,5 +1,5 @@
 {
-  "name": "wallet-identity-resolver-monorepo",
+  "name": "identity-resolver-monorepo",
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",

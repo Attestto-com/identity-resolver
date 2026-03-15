@@ -1,4 +1,4 @@
-# wallet-identity-resolver
+# identity-resolver
 
 Pluggable on-chain identity discovery for wallet addresses. Given a wallet address and chain, discover all DIDs, SBTs, attestations, and credentials attached to it.
 
@@ -8,7 +8,7 @@ The consumer decides which identity types to accept and in what priority — no 
 
 ```
 packages/
-  core/           → wallet-identity-resolver       (engine + pkh fallback)
+  core/           → identity-resolver       (engine + pkh fallback)
   sns/            → @attestto/wir-sns              (SNS .sol domains → did:sns)
   ens/            → @attestto/wir-ens              (ENS .eth domains → did:ens)
   attestto-creds/ → @attestto/wir-attestto-creds   (KYC, SBTs, VCs)
@@ -29,15 +29,15 @@ A traditional bank operating under SWIFT/ISO 20022 cannot interact with a DeFi p
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  1. WalletConnect / Phantom            → address + signer       │
-│  2. wallet-identity-resolver           → DIDs, KYC, vLEI, SBTs │
-│  3. credential-wallet-connector        → VP request + verify    │
+│  2. identity-resolver           → DIDs, KYC, vLEI, SBTs │
+│  3. identity-bridge        → VP request + verify    │
 └──────────────────────────────────────────────────────────────────┘
      Existing connectors ──┘    Identity middleware ──┘
 ```
 
 ### What you get vs. what exists
 
-| | WalletConnect / Dynamic / Wagmi | wallet-identity-resolver |
+| | WalletConnect / Dynamic / Wagmi | identity-resolver |
 |---|---|---|
 | **Purpose** | Connect wallet, sign transactions | Resolve identities from an address |
 | **Input** | User action (QR scan, click) | Wallet address (string) |
@@ -48,8 +48,8 @@ A traditional bank operating under SWIFT/ISO 20022 cannot interact with a DeFi p
 ### The full stack
 
 1. **WalletConnect** → connect Solana/Ethereum wallet → get address
-2. **wallet-identity-resolver** → resolve that address → find SNS domain, Attestto credentials, Civic pass, vLEI attestation
-3. **[credential-wallet-connector](https://github.com/Attestto-com/credential-wallet-connector)** → discover credential wallet extensions → request Verifiable Presentation → verify cryptographically
+2. **identity-resolver** → resolve that address → find SNS domain, Attestto credentials, Civic pass, vLEI attestation
+3. **[identity-bridge](https://github.com/Attestto-com/identity-bridge)** → discover credential wallet extensions → request Verifiable Presentation → verify cryptographically
 
 Step 1 uses existing connectors. Steps 2–3 are what we built — the identity middleware that MetaMask, Phantom, and every crypto wallet are currently missing. By following W3C CHAPI and DIDComm v2 standards, this stack is already compatible with the regulatory direction of eIDAS 2.0 (EU), FATF Travel Rule, and jurisdictional digital identity wallet mandates.
 
@@ -57,7 +57,7 @@ Step 1 uses existing connectors. Steps 2–3 are what we built — the identity 
 
 ```bash
 # Core (required)
-npm install wallet-identity-resolver
+npm install identity-resolver
 
 # Pick the providers you need
 npm install @attestto/wir-sns @attestto/wir-attestto-creds @attestto/wir-civic
@@ -66,11 +66,11 @@ npm install @attestto/wir-sns @attestto/wir-attestto-creds @attestto/wir-civic
 ## Quick Start
 
 ```ts
-import { resolveIdentities } from 'wallet-identity-resolver'
+import { resolveIdentities } from 'identity-resolver'
 import { sns } from '@attestto/wir-sns'
 import { attesttoCreds } from '@attestto/wir-attestto-creds'
 import { civic } from '@attestto/wir-civic'
-import { pkh } from 'wallet-identity-resolver'
+import { pkh } from 'identity-resolver'
 
 const identities = await resolveIdentities({
   chain: 'solana',
@@ -93,7 +93,7 @@ const identities = await resolveIdentities({
 ### Ethereum
 
 ```ts
-import { resolveIdentities, pkh } from 'wallet-identity-resolver'
+import { resolveIdentities, pkh } from 'identity-resolver'
 import { ens } from '@attestto/wir-ens'
 
 const identities = await resolveIdentities({
@@ -154,7 +154,7 @@ interface ResolvedIdentity {
 
 | Package | Chain | What it resolves | Required options |
 |---|---|---|---|
-| `wallet-identity-resolver` | any | Core engine + `pkh()` fallback | — |
+| `identity-resolver` | any | Core engine + `pkh()` fallback | — |
 | `@attestto/wir-sns` | Solana | SNS `.sol` domains → `did:sns` | `apiUrl`, `resolverUrl` |
 | `@attestto/wir-ens` | Ethereum | ENS `.eth` domains → `did:ens` | `resolverUrl` |
 | `@attestto/wir-attestto-creds` | Solana | Attestto KYC, identity SBTs, VCs | `programId`, `rpcUrl` |
@@ -183,7 +183,7 @@ interface MyProviderOptions {
 Export a function that takes your options and returns an `IdentityProvider`. This is the pattern every built-in provider follows.
 
 ```ts
-import type { IdentityProvider } from 'wallet-identity-resolver'
+import type { IdentityProvider } from 'identity-resolver'
 
 export function myProvider(options: MyProviderOptions): IdentityProvider {
   return {
@@ -205,7 +205,7 @@ The engine calls `resolve(ctx)` with the wallet address and chain. Your job:
 3. Return `[]` if nothing found — **never throw**
 
 ```ts
-import type { IdentityProvider, ResolveContext, ResolvedIdentity } from 'wallet-identity-resolver'
+import type { IdentityProvider, ResolveContext, ResolvedIdentity } from 'identity-resolver'
 
 export function myProvider(options: MyProviderOptions): IdentityProvider {
   return {
@@ -248,7 +248,7 @@ export function myProvider(options: MyProviderOptions): IdentityProvider {
 Pass your provider to `resolveIdentities` alongside any others. Order = priority.
 
 ```ts
-import { resolveIdentities, pkh } from 'wallet-identity-resolver'
+import { resolveIdentities, pkh } from 'identity-resolver'
 import { myProvider } from './my-provider'
 
 const identities = await resolveIdentities({
@@ -266,14 +266,14 @@ const identities = await resolveIdentities({
 To share your provider as an npm package:
 
 1. Name it `@yourorg/wir-<name>` (convention, not required)
-2. Add `wallet-identity-resolver` as a **peer dependency** for type compatibility
+2. Add `identity-resolver` as a **peer dependency** for type compatibility
 3. Export your factory function + options interface
 
 ```json
 {
   "name": "@yourorg/wir-my-provider",
   "peerDependencies": {
-    "wallet-identity-resolver": "^0.1.0"
+    "identity-resolver": "^0.1.0"
   }
 }
 ```

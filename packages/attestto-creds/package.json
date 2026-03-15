@@ -1,7 +1,7 @@
 {
   "name": "@attestto/wir-attestto-creds",
   "version": "0.1.0",
-  "description": "Attestto Creds provider for wallet-identity-resolver — KYC, identity SBTs, and verifiable credentials",
+  "description": "Attestto Creds provider for identity-resolver — KYC, identity SBTs, and verifiable credentials",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -28,15 +28,15 @@
     "sbt",
     "kyc",
     "solana",
-    "wallet-identity-resolver"
+    "identity-resolver"
   ],
   "license": "MIT",
   "author": "Eduardo Chongkan",
   "peerDependencies": {
-    "wallet-identity-resolver": "workspace:*"
+    "identity-resolver": "workspace:*"
   },
   "devDependencies": {
-    "wallet-identity-resolver": "workspace:*",
+    "identity-resolver": "workspace:*",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
   }

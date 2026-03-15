@@ -15,8 +15,8 @@ import type { ResolveOptions, ResolvedIdentity, ResolveContext } from './types'
  *
  * @example
  * ```ts
- * import { resolveIdentities } from 'wallet-identity-resolver'
- * import { sns, civic, pkh } from 'wallet-identity-resolver/providers'
+ * import { resolveIdentities } from 'identity-resolver'
+ * import { sns, civic, pkh } from 'identity-resolver/providers'
  *
  * const identities = await resolveIdentities({
  *   chain: 'solana',

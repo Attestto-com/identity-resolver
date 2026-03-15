@@ -1,12 +1,12 @@
-# Contributing to wallet-identity-resolver
+# Contributing to identity-resolver
 
 Thanks for your interest in expanding on-chain identity discovery.
 
 ## Getting Started
 
 ```bash
-git clone https://github.com/Attestto-com/wallet-identity-resolver.git
-cd wallet-identity-resolver
+git clone https://github.com/Attestto-com/identity-resolver.git
+cd identity-resolver
 pnpm install
 pnpm run build    # Build all packages
 pnpm run lint     # Type-check all packages
@@ -16,7 +16,7 @@ pnpm run lint     # Type-check all packages
 
 ```
 packages/
-  core/              → wallet-identity-resolver        (engine + pkh fallback)
+  core/              → identity-resolver        (engine + pkh fallback)
   sns/               → @attestto/wir-sns               (SNS .sol domains)
   ens/               → @attestto/wir-ens               (ENS .eth domains)
   civic/             → @attestto/wir-civic             (Civic Pass tokens)
@@ -32,7 +32,7 @@ The most common contribution. Each provider lives in its own package under `pack
 
 - [ ] Create `packages/<name>/` with `src/index.ts`, `package.json`, `tsconfig.json`
 - [ ] Export a factory function that returns `IdentityProvider`
-- [ ] Set `wallet-identity-resolver` as a **peer dependency**
+- [ ] Set `identity-resolver` as a **peer dependency**
 - [ ] Options interface: all endpoints are **required** (no hardcoded URLs)
 - [ ] `resolve()` never throws — returns `[]` on failure
 - [ ] `resolve()` respects `ctx.signal` for cancellation (pass to `fetch`)
@@ -68,10 +68,10 @@ The most common contribution. Each provider lives in its own package under `pack
     "lint": "tsc --noEmit"
   },
   "peerDependencies": {
-    "wallet-identity-resolver": "workspace:^"
+    "identity-resolver": "workspace:^"
   },
   "devDependencies": {
-    "wallet-identity-resolver": "workspace:^",
+    "identity-resolver": "workspace:^",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
   }

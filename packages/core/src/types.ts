@@ -1,5 +1,5 @@
 /**
- * wallet-identity-resolver — Core type definitions
+ * identity-resolver — Core type definitions
  *
  * Defines the pluggable provider interface and resolved identity model.
  */

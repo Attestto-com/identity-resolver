@@ -1,7 +1,7 @@
 {
   "name": "@attestto/wir-civic",
   "version": "0.1.0",
-  "description": "Civic Pass provider for wallet-identity-resolver",
+  "description": "Civic Pass provider for identity-resolver",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -26,15 +26,15 @@
     "kyc",
     "gateway",
     "solana",
-    "wallet-identity-resolver"
+    "identity-resolver"
   ],
   "license": "MIT",
   "author": "Eduardo Chongkan",
   "peerDependencies": {
-    "wallet-identity-resolver": "workspace:*"
+    "identity-resolver": "workspace:*"
   },
   "devDependencies": {
-    "wallet-identity-resolver": "workspace:*",
+    "identity-resolver": "workspace:*",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
   }
