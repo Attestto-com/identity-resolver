@@ -16,6 +16,43 @@ packages/
   sas/            → @attestto/wir-sas              (Solana Attestation Service)
 ```
 
+## Identity Middleware — not a wallet connector
+
+WalletConnect, Dynamic, and Wagmi are **crypto wallet connectors**. They connect MetaMask, Phantom, and Ledger to dApps for **transaction signing**. Once connected, they give you an address and a signer. That's where they stop.
+
+This package is the **identity layer that comes after**. It's DNS for compliance — given a wallet address, it resolves the full identity graph attached to it: DIDs, domains, KYC credentials, institutional attestations, soulbound tokens.
+
+### Why this matters
+
+A traditional bank operating under SWIFT/ISO 20022 cannot interact with a DeFi protocol using WalletConnect alone. Before allowing the transaction, the protocol needs to **resolve** the bank's `did:web` or vLEI credential to verify institutional identity and compliance status. No existing wallet connector does this.
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  1. WalletConnect / Phantom            → address + signer       │
+│  2. wallet-identity-resolver           → DIDs, KYC, vLEI, SBTs │
+│  3. credential-wallet-connector        → VP request + verify    │
+└──────────────────────────────────────────────────────────────────┘
+     Existing connectors ──┘    Identity middleware ──┘
+```
+
+### What you get vs. what exists
+
+| | WalletConnect / Dynamic / Wagmi | wallet-identity-resolver |
+|---|---|---|
+| **Purpose** | Connect wallet, sign transactions | Resolve identities from an address |
+| **Input** | User action (QR scan, click) | Wallet address (string) |
+| **Output** | Signer + address | DID Documents, linked identities (`alsoKnownAs`), KYC status, institutional credentials |
+| **When** | Before any interaction | After wallet connection |
+| **Compliance** | None — no identity awareness | FATF Travel Rule, eIDAS 2.0, GLEIF vLEI ready |
+
+### The full stack
+
+1. **WalletConnect** → connect Solana/Ethereum wallet → get address
+2. **wallet-identity-resolver** → resolve that address → find SNS domain, Attestto credentials, Civic pass, vLEI attestation
+3. **[credential-wallet-connector](https://github.com/Attestto-com/credential-wallet-connector)** → discover credential wallet extensions → request Verifiable Presentation → verify cryptographically
+
+Step 1 uses existing connectors. Steps 2–3 are what we built — the identity middleware that MetaMask, Phantom, and every crypto wallet are currently missing. By following W3C CHAPI and DIDComm v2 standards, this stack is already compatible with the regulatory direction of eIDAS 2.0 (EU), FATF Travel Rule, and jurisdictional digital identity wallet mandates.
+
 ## Install
 
 ```bash
