@@ -8,5 +8,5 @@ export type {
   ResolveOptions,
 } from './types'
 
-// Re-export providers for convenience (also available via /providers subpath)
-export { pkh, sns, ens, civic, attesttoSsid, sas } from './providers'
+// Built-in provider (zero dependencies, always available)
+export { pkh } from './providers'
