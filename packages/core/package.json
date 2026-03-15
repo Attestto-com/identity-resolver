@@ -1,6 +1,6 @@
 {
   "name": "identity-resolver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Identity middleware — resolve DIDs, domains, SBTs, credentials, and compliance status from any wallet address",
   "type": "module",
   "main": "dist/index.cjs",
@@ -18,7 +18,9 @@
       "require": "./dist/providers/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts src/providers/index.ts --format esm,cjs --dts --clean",
     "lint": "tsc --noEmit",
