@@ -1,6 +1,6 @@
 {
-  "name": "identity-resolver",
-  "version": "0.2.2",
+  "name": "@attestto/identity-resolver",
+  "version": "0.3.0",
   "description": "Identity middleware — resolve DIDs, domains, SBTs, credentials, and compliance status from any wallet address",
   "type": "module",
   "main": "dist/index.cjs",
